@@ -50,7 +50,7 @@ pip install matplotlib
 ```
 ### 3. Run the application
 ```bash
-python main.py
+python Internal.py
 ```
 ## 💡 How It Works
 

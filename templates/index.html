@@ -1,64 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>KTU Internal Mark Calculator</title>
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KTU Internal Mark Calculator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 100%;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .form-row > div {
+      flex: 1;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    input:focus {
+      outline: none;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    }
+    
+    button {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(45deg, #4caf50, #45a049);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    }
+    
+    .result {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(76, 175, 80, 0.2);
+      border-radius: 10px;
+      border-left: 4px solid #4caf50;
+      font-size: 1.3rem;
+      font-weight: 600;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 1.5rem 0 1rem 0;
+      color: #ffd700;
+      text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .container {
+        padding: 1.5rem;
+        margin: 1rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>KTU Internal Mark Calculator</h1>
-    <form id="markForm">
-        <label>Name: <input type="text" name="name" required></label><br>
-
-        <label>Test 1: <input type="number" step="0.1" name="test1" required></label>
-        <label>Out of: <input type="number" name="test1_total" required></label><br>
-
-        <label>Test 2: <input type="number" step="0.1" name="test2" required></label>
-        <label>Out of: <input type="number" name="test2_total" required></label><br>
-
-        <label>Assignment 1: <input type="number" step="0.1" name="assignment1" required></label>
-        <label>Out of: <input type="number" name="assignment1_total" required></label><br>
-
-        <label>Assignment 2: <input type="number" step="0.1" name="assignment2" required></label>
-        <label>Out of: <input type="number" name="assignment2_total" required></label><br>
-
-        <label>Attendance: <input type="range" name="attendance" min="0" max="100" value="75" id="attendanceRange">
-            <span id="attendanceValue">75%</span>
-        </label><br>
-
-        <button type="submit">Calculate</button>
+  <div class="container">
+    <h1>🎓 KTU Internal Mark Calculator</h1>
+    
+    <form method="POST" action="/calculate">
+      <div class="form-group">
+        <label for="name">Student Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter student name" required />
+      </div>
+      
+      <div class="section-title">📝 Test Marks</div>
+      
+      <div class="form-row">
+        <div>
+          <label for="test1">Test 1 Marks</label>
+          <input type="number" id="test1" name="test1" step="0.01" placeholder="Marks obtained" required />
+        </div>
+        <div>
+          <label for="test1_total">Out of</label>
+          <input type="number" id="test1_total" name="test1_total" step="0.01" placeholder="Total marks" required />
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div>
+          <label for="test2">Test 2 Marks</label>
+          <input type="number" id="test2" name="test2" step="0.01" placeholder="Marks obtained" required />
+        </div>
+        <div>
+          <label for="test2_total">Out of</label>
+          <input type="number" id="test2_total" name="test2_total" step="0.01" placeholder="Total marks" required />
+        </div>
+      </div>
+      
+      <div class="section-title">📋 Assignment Marks</div>
+      
+      <div class="form-row">
+        <div>
+          <label for="assignment1">Assignment 1 Marks</label>
+          <input type="number" id="assignment1" name="assignment1" step="0.01" placeholder="Marks obtained" required />
+        </div>
+        <div>
+          <label for="assignment1_total">Out of</label>
+          <input type="number" id="assignment1_total" name="assignment1_total" step="0.01" placeholder="Total marks" required />
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div>
+          <label for="assignment2">Assignment 2 Marks</label>
+          <input type="number" id="assignment2" name="assignment2" step="0.01" placeholder="Marks obtained" required />
+        </div>
+        <div>
+          <label for="assignment2_total">Out of</label>
+          <input type="number" id="assignment2_total" name="assignment2_total" step="0.01" placeholder="Total marks" required />
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="attendance">Attendance Percentage</label>
+        <input type="number" id="attendance" name="attendance" step="0.01" placeholder="Enter attendance % (0-100)" min="0" max="100" required />
+      </div>
+      
+      <button type="submit">🚀 Calculate Internal Mark</button>
     </form>
-
-    <div id="result"></div>
-
-    <script>
-        const range = document.getElementById("attendanceRange");
-        const valueLabel = document.getElementById("attendanceValue");
-        range.addEventListener("input", () => {
-            valueLabel.textContent = `${range.value}%`;
-        });
-
-        document.getElementById("markForm").addEventListener("submit", async function(e) {
-            e.preventDefault();
-            const form = new FormData(this);
-            const data = Object.fromEntries(form.entries());
-
-            const response = await fetch("/calculate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.json();
-            const resultDiv = document.getElementById("result");
-            if (result.status === "success") {
-                resultDiv.textContent = result.result;
-                resultDiv.style.color = "green";
-            } else {
-                resultDiv.textContent = result.message;
-                resultDiv.style.color = "red";
-            }
-        });
-    </script>
+    
+    {% if result %}
+      <div class="result">
+        {{ result }}
+      </div>
+    {% endif %}
+  </div>
 </body>
 </html>
+
